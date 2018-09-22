@@ -1,0 +1,10 @@
+{
+  "name": "influx-api",
+  "version": "0.0.1",
+  "description": "Thin wrapper around Axios HTTP library which eases working with Influx HTTP API",
+  "main": "index.js",
+  "repository": "https://github.com/jmarceli/influx-api",
+  "author": "Jan Grzegorowski <grzegorowski@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
