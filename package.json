@@ -6,5 +6,9 @@
   "repository": "https://github.com/jmarceli/influx-api",
   "author": "Jan Grzegorowski <grzegorowski@gmail.com>",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "dependencies": {
+    "axios": "^0.18.0",
+    "qs": "^6.5.2"
+  }
 }
