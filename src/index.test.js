@@ -1,4 +1,3 @@
-// @flow
 import { query, buildUrl } from './index';
 
 jest.mock('./__mocks__/axios');

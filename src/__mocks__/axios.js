@@ -1,7 +1,7 @@
 const axios = params => new Promise((resolve, reject) => {
-  // if (params.url === 'non.existent') {
-    // throw new Error('test');
-  // }
+  if (params.url === 'non.existent') {
+    reject(new Error('test'));
+  }
 
   resolve({
     data: {
