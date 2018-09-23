@@ -10,6 +10,7 @@
   "scripts": {
     "test": "jest src",
     "lint": "eslint src",
+    "coverage": "jest src --coverage",
     "precommit": "yarn flow src && yarn lint && yarn test",
     "test:watch": "jest src --watch --notify"
   },
@@ -31,7 +32,8 @@
     "flow-bin": "^0.81.0",
     "flow-typed": "^2.5.1",
     "husky": "^1.0.0-rc.15",
-    "jest": "^23.6.0"
+    "jest": "^23.6.0",
+    "jest-mock-axios": "^2.1.11"
   },
   "husky": {
     "hooks": {
