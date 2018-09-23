@@ -8,10 +8,10 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest src --watch",
-    "lint": "esw src",
-    "lint:watch": "esw src --watch"
+    "test": "jest src",
+    "lint": "eslint src",
+    "precommit": "yarn flow src && yarn lint && yarn test",
+    "test:watch": "jest src --watch --notify"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -28,9 +28,14 @@
     "eslint-plugin-flowtype": "^2.50.1",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jest": "^21.22.1",
-    "eslint-watch": "^4.0.2",
     "flow-bin": "^0.81.0",
     "flow-typed": "^2.5.1",
+    "husky": "^1.0.0-rc.15",
     "jest": "^23.6.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn precommit"
+    }
   }
 }
