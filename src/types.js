@@ -7,14 +7,13 @@ type InfluxParams = {|
   url: string,
   u?: string,
   p?: string,
-  db?: string, // required for most SELECT and SHOW queries
-  q?: string,
 |};
 
 export type UrlParams = { host: string, ssl?: boolean, port?: number };
 
 export type QueryParams = {
   ...InfluxParams,
+  db?: string, // required for most SELECT and SHOW queries
   chunked?: Chunked,
   pretty?: boolean,
   q: string, // query without a query string makes no sense

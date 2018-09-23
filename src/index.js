@@ -8,15 +8,22 @@ import type {
 } from './types';
 
 // Returns base post params
-const postParams = (params: WriteParams | QueryParams) => ({
-  url: params.url,
-  method: 'POST',
+const postParams = (params: WriteParams | QueryParams) => {
+  const result: Object = {
+    url: params.url,
+    method: 'POST',
+  };
+
+  if (params.u) {
   // use Basic Auth headers if username is provided
-  auth: params.u ? {
-    username: params.u,
-    password: params.p || '',
-  } : undefined,
-});
+    result.auth = {
+      username: params.u,
+      password: params.p || '',
+    };
+  }
+
+  return result;
+};
 
 // Returns params for Influx query request
 const queryParams = (params: QueryParams): AxiosXHRConfig<string> => {
@@ -29,34 +36,51 @@ const queryParams = (params: QueryParams): AxiosXHRConfig<string> => {
   if (params.responseType && params.responseType === 'msgpack') {
     headers.Accept = 'application/x-msgpack';
   }
-  return {
+
+  const result: Object = {
     ...postParams(params),
     headers,
     data: qs.stringify({ q: params.q }),
-    // use db, precision params if provided
-    params: {
-      db: params.db ? params.db : undefined,
-      epoch: params.epoch ? params.epoch : 'ns', // 'ns' by default
-    },
   };
+
+  // handle conditional params
+  if (params.db && params.epoch) {
+    result.params = { db: params.db, epoch: params.epoch };
+  } else if (params.db) {
+    result.params = { db: params.db };
+  } else if (params.epoch) {
+    result.params = { epoch: params.epoch };
+  }
+
+  return result;
 };
 
 // Returns params for Influx write request
-const writeParams = (params: WriteParams): AxiosXHRConfig<string> => ({
-  ...postParams(params),
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded', // required to send query in POST body
-    Accept: 'application/json',
-  },
-  data: params.data,
-  // use precision param if provided
-  params: {
-    db: params.db,
-    precision: params.precision ? params.precision : 'ns', // 'ns' by default
-    rp: params.rp ? params.rp : undefined,
-    consistency: params.consistency ? params.consistency : undefined,
-  },
-});
+const writeParams = (params: WriteParams): AxiosXHRConfig<string> => {
+  const result: Object = {
+    ...postParams(params),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded', // required to send query in POST body
+      Accept: 'application/json',
+    },
+    data: params.data,
+    params: {
+      db: params.db,
+    },
+  };
+
+  // handle conditional params
+  if (params.precision) {
+    result.params.precision = params.precision;
+  }
+  if (params.rp) {
+    result.params.rp = params.rp;
+  }
+  if (params.consistency) {
+    result.params.consistency = params.consistency;
+  }
+  return result;
+};
 
 // Execute Influx request using POST
 const post = async (config: AxiosXHRConfig<string>): Promise<InfluxResponse> => {
