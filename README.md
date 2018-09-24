@@ -1,15 +1,25 @@
 Influx API
 ===
 
-This is a thin wrapper around [Axios HTTP client](https://github.com/axios/axios) which is targeted to work with InfluxDB HTTP API.
+This is a thin wrapper around [Axios HTTP client](https://github.com/axios/axios) which is targeted to work with [InfluxDB HTTP API](https://docs.influxdata.com/influxdb/v1.6/tools/api/).
 
-## Examples
+# Installation
 
-Here is how you may use this package.
+```js
+yarn add influx-api
+```
 
-### Simple
+or
 
-#### Query
+```js
+npm install --save influx-api
+```
+
+# Examples
+
+## Simple
+
+### Query
 
 Probably simplest possible query which will return database names in JSON format.
 
@@ -24,7 +34,7 @@ const result = await query({
 console.log(result);
 ```
 
-#### Write
+### Write
 
 Writing **field** (`field_1`) value to selected **measurement** (`measurement_1`).
 
@@ -39,9 +49,9 @@ const result = await write({
 console.log(result); // empty string on success
 ```
 
-### (A little) more complex
+## (A little) more complex
 
-#### Query
+### Query
 
 Query specific **db** (`influx_db`) using selected **u** (`username`) and **p** (`password`) with given **precision** (`ms`) expecting **responseType** (`csv` string) as a result.
 
@@ -61,7 +71,7 @@ const result = await query({
 console.log(result);
 ```
 
-#### Write
+### Write
 
 Writing some **tag**s and **field**s to a **measurement**s (`measurement_1`, `measurement_2`) with selected timestamp `1532041200123`.
 
@@ -78,9 +88,9 @@ measurement_2 tag_1=123 field_1=1,field_2=2,field_3=3 1532041200123`
 console.log(result); // empty string on success
 ```
 
-## API
+# API
 
-### query(params)
+## query(params)
 
 **params** - object with following properties, see official [Influx HTTP API query endpoint](https://docs.influxdata.com/influxdb/v1.6/tools/api/#query-string-parameters-1)
 
@@ -92,7 +102,7 @@ console.log(result); // empty string on success
 - **epoch** (string) - Time precision in query response, available values are: (default) `ns`, `u`, `ms`, `s`, `m`, `h`
 - **responseType** (string) - Type of response data, available values are: (default) `json`, `csv`, `msgpack`
 
-### write(params)
+## write(params)
 
 **params** - object with following properties, see official [Influx HTTP API write endpoint](https://docs.influxdata.com/influxdb/v1.6/tools/api/#query-string-parameters-2)
 
@@ -105,30 +115,29 @@ console.log(result); // empty string on success
 - **precision** (string) - Time precision for time provided in data, available values: (default) `ns`, `u`, `ms`, `s`, `m`, `h`
 - **consistency** (string) - Used in InfluxDB Enterprise to ensure write consistency, available values: (default) `one`, `any`, `quorum`, `all`
 
-## Features
+# Features
 
 - Uses Basic Authentication headers - never sends authentication credentials as query parameters
-- Allows to select prefered responseType - default is JSON but you may also select CSV or MSGPACK if you want
+- Allows to select prefered responseType - default is JSON but you may also select CSV or [MSGPACK](https://msgpack.org/index.html) if you want
 - Supports all Influx Data Types - use [Influx Line Protocol format](https://docs.influxdata.com/influxdb/v1.6/write_protocols/line_protocol_reference/) to specify type of written data e.g. (`123i` for Integer)
 - Follows Influx HTTP API conventions - it uses same parameters notation as official Influx HTTP API and allows you to write points directly in Line Protocol format
 - Stateless - like Influx HTTP API itself, there is no need to create any kind of client object
-- Universal - with NodeJS and current browsers
 - Ease of use - correct me if I'm wrong :)
 
-## WHY?
+# WHY?
 
-Most features listed in [Features](#Features) section are unavailable in the most popular [node-influx](https://github.com/node-influx/node-influx) package.
+Most features listed in [Features](#features) section are unavailable in the most popular [node-influx](https://github.com/node-influx/node-influx) package.
 
-## FAQ
+# FAQ
 
 **Does it have a stable API?**
 
 It will have as of **1.x.x** version, but currently (**0.x.x** version) it might be modified - especially extended with a new features which should (but don't have to) be backward compatible.
 
-## License
+# License
 
-MIT
+[MIT](./LICENSE)
 
-## Author
+# Author
 
 Jan Grzegorowski
