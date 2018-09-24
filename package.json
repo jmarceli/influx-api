@@ -1,6 +1,6 @@
 {
   "name": "influx-api",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Thin wrapper around Axios HTTP library which eases working with Influx HTTP API",
   "main": "index.js",
   "repository": "https://github.com/jmarceli/influx-api",
