@@ -1,4 +1,4 @@
-// @flow
+/* @flow strict */
 type Consistency = 'any' | 'one' | 'quorum' | 'all';
 type Precision = 'ns' | 'u' | 'ms' | 's' | 'm' | 'h';
 type Chunked = true | number;

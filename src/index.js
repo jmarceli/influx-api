@@ -5,7 +5,7 @@ import qs from 'qs';
 import type { AxiosXHRConfig } from 'axios';
 import type {
   QueryParams, WriteParams, InfluxResponse, UrlParams,
-} from './types';
+} from './types.js.flow';
 
 // Returns base post params
 const postParams = (params: WriteParams | QueryParams) => {
@@ -83,32 +83,33 @@ const writeParams = (params: WriteParams): AxiosXHRConfig<string> => {
 };
 
 // Execute Influx request using POST
-const post = async (config: AxiosXHRConfig<string>): Promise<InfluxResponse> => {
-  try {
-    // $FlowFixMe
-    return await axios(config);
-  } catch (error) {
-    if (typeof error.response === 'undefined') {
-      // ensure some .response in case of
-      // possibly preflight/CORS error (see: https://github.com/axios/axios/issues/838)
-      error.response = {
-        status: 400,
-        statusText: error.message,
-        data: 'This might be a CORS error, network problem or invalid HTTPS redirect, invalid URL. Please check your connection configuration once more.',
-      };
-    }
+const post = (config: AxiosXHRConfig<string>): Promise<InfluxResponse> => (
+  // $FlowFixMe
+  new Promise((resolve, reject) => axios(config)
+    .then(result => resolve(result))
+    .catch((error) => {
+      if (typeof error.response === 'undefined') {
+        // ensure some .response in case of
+        // possibly preflight/CORS error (see: https://github.com/axios/axios/issues/838)
+        // eslint-disable-next-line
+        error.response = {
+          status: 400,
+          statusText: error.message,
+          data: 'This might be a CORS error, network problem or invalid HTTPS redirect, invalid URL. Please check your connection configuration once more.',
+        };
+      }
 
-    throw error;
-  }
-};
+      reject(error);
+    }))
+);
 
 // Execute Influx query
-export const query = async (params: QueryParams): Promise<InfluxResponse> => (
+export const query = (params: QueryParams): Promise<InfluxResponse> => (
   post(queryParams({ ...params, url: `${params.url}/query` }))
 );
 
 // Write points to Influx
-export const write = async (params: WriteParams): Promise<InfluxResponse> => (
+export const write = (params: WriteParams): Promise<InfluxResponse> => (
   post(writeParams({ ...params, url: `${params.url}/write` }))
 );
 
@@ -116,3 +117,9 @@ export const write = async (params: WriteParams): Promise<InfluxResponse> => (
 export const buildUrl = ({ host, ssl = false, port = 8086 }: UrlParams): string => (
   `http${ssl ? 's' : ''}://${host}:${port}`
 );
+
+export default {
+  query,
+  write,
+  buildUrl,
+};

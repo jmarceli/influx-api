@@ -2,28 +2,44 @@
   "name": "influx-api",
   "version": "0.1.0",
   "description": "Thin wrapper around Axios HTTP library which eases working with Influx HTTP API",
-  "main": "index.js",
-  "repository": "https://github.com/jmarceli/influx-api",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jmarceli/influx-api.git"
+  },
   "author": "Jan Grzegorowski <grzegorowski@gmail.com>",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "test": "jest src",
+    "clean": "rimraf lib",
+    "test": "yarn jest src",
+    "test:watch": "BABEL_ENV=test yarn jest src --watch --notify",
+    "cover": "jest src --coverage",
     "lint": "eslint src",
-    "coverage": "jest src --coverage",
+    "build": "BABEL_ENV=production yarn babel ./src -d ./lib --ignore src/__mocks__/*.js,*.test.js && cp src/types.js.flow lib/",
     "precommit": "yarn flow src && yarn lint && yarn test",
-    "test:watch": "jest src --watch --notify"
+    "prepublish": "yarn clean && yarn lint && yarn test && yarn build"
   },
+  "engines": {
+    "node": ">= 8.x"
+  },
+  "keywords": [
+    "influx",
+    "influx-http-api"
+  ],
   "dependencies": {
     "axios": "^0.18.0",
     "qs": "^6.5.2"
   },
   "devDependencies": {
-    "babel-eslint": "^9.0.0",
-    "babel-jest": "^23.6.0",
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^10.0.0",
+    "babel-jest": "^23.4.0",
+    "babel-plugin-flow-runtime": "^0.17.0",
     "babel-plugin-rewire": "^1.2.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "eslint": "^5.6.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-flowtype": "^2.50.1",
@@ -33,7 +49,8 @@
     "flow-typed": "^2.5.1",
     "husky": "^1.0.0-rc.15",
     "jest": "^23.6.0",
-    "jest-mock-axios": "^2.1.11"
+    "jest-mock-axios": "^2.1.11",
+    "rimraf": "^2.6.2"
   },
   "husky": {
     "hooks": {
