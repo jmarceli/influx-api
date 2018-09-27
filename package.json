@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "description": "Thin wrapper around Axios HTTP library which eases working with Influx HTTP API",
   "main": "lib/index.js",
+  "module": "lib/index.esm.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/jmarceli/influx-api.git"
@@ -16,7 +17,7 @@
     "test:watch": "BABEL_ENV=test yarn jest src --watch --notify",
     "cover": "jest src --coverage",
     "lint": "eslint src",
-    "build": "BABEL_ENV=production yarn babel ./src -d ./lib --ignore src/__mocks__/*.js,*.test.js && cp src/types.js.flow lib/",
+    "build": "yarn rollup -c",
     "precommit": "yarn flow src && yarn lint && yarn test",
     "prepublish": "yarn clean && yarn lint && yarn test && yarn build"
   },
@@ -33,8 +34,10 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.0",
     "babel-jest": "^23.4.0",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-flow-runtime": "^0.17.0",
     "babel-plugin-rewire": "^1.2.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
@@ -50,7 +53,11 @@
     "husky": "^1.0.0-rc.15",
     "jest": "^23.6.0",
     "jest-mock-axios": "^2.1.11",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "rollup": "^0.66.2",
+    "rollup-plugin-babel": "3",
+    "rollup-plugin-copy": "^0.2.3",
+    "rollup-plugin-flow": "^1.1.1"
   },
   "husky": {
     "hooks": {
