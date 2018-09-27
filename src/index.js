@@ -3,9 +3,10 @@ import axios from 'axios';
 import qs from 'qs';
 
 import type { AxiosXHRConfig } from 'axios';
+// eslint-disable-next-line
 import type {
   QueryParams, WriteParams, InfluxResponse, UrlParams,
-} from './types.js.flow';
+} from '.';
 
 // Returns base post params
 const postParams = (params: WriteParams | QueryParams) => {
@@ -117,9 +118,3 @@ export const write = (params: WriteParams): Promise<InfluxResponse> => (
 export const buildUrl = ({ host, ssl = false, port = 8086 }: UrlParams): string => (
   `http${ssl ? 's' : ''}://${host}:${port}`
 );
-
-export default {
-  query,
-  write,
-  buildUrl,
-};
