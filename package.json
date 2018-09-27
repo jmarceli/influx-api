@@ -1,6 +1,6 @@
 {
   "name": "influx-api",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Thin wrapper around Axios HTTP library which eases working with Influx HTTP API",
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
