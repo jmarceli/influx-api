@@ -134,6 +134,10 @@ Most features listed in [Features](#features) section are unavailable in the mos
 
 It will have as of **1.x.x** version, but currently (**0.x.x** version) it might be modified - especially extended with a new features which should (but don't have to) be backward compatible.
 
+**Why arguments has such strage names: u, p etc.?**
+
+I want to make it as close as possible to original Influx HTTP API documented on https://docs.influxdata.com/influxdb/v1.6/tools/api/.
+
 # License
 
 [MIT](./LICENSE)
