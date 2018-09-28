@@ -1,7 +1,9 @@
 Influx API
 ===
 
-This is a thin wrapper around [Axios HTTP client](https://github.com/axios/axios) which is targeted to work with [InfluxDB HTTP API](https://docs.influxdata.com/influxdb/v1.6/tools/api/).
+[![Build Status](https://travis-ci.org/jmarceli/influx-api.svg?branch=master)](https://travis-ci.org/jmarceli/influx-api) [![dependencies Status](https://david-dm.org/jmarceli/influx-api/status.svg)](https://david-dm.org/jmarceli/influx-api) [![devDependencies Status](https://david-dm.org/jmarceli/influx-api/dev-status.svg)](https://david-dm.org/jmarceli/influx-api?type=dev) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+Thin wrapper around [Axios HTTP client](https://github.com/axios/axios) which is targeted to work with [InfluxDB HTTP API](https://docs.influxdata.com/influxdb/v1.6/tools/api/).
 
 # Installation
 
@@ -132,7 +134,7 @@ Most features listed in [Features](#features) section are unavailable in the mos
 
 **Does it have a stable API?**
 
-It will have as of **1.x.x** version, but currently (**0.x.x** version) it might be modified - especially extended with a new features which should (but don't have to) be backward compatible.
+It will have as of **1.x.x** version, but currently (**0.x.x** version) it might be modified, but it is not something that is very likely to happen.
 
 **Why arguments has such strage names: u, p etc.?**
 
