@@ -19,7 +19,7 @@
     "lint": "eslint src",
     "build": "yarn rollup -c",
     "precommit": "yarn flow src && yarn lint && yarn test",
-    "prepublish": "yarn clean && yarn lint && yarn test && yarn build"
+    "prepublishOnly": "yarn clean && yarn lint && yarn test && yarn build"
   },
   "engines": {
     "node": ">= 8.x"
