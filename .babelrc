@@ -1,20 +1,4 @@
 {
-  "presets": [
-    ["env",  {
-      "targets": {
-        "esmodules": true
-      }
-    }]
-  ],
-	"env": {
-		"production": {
-			"plugins": ["transform-flow-strip-types", ["transform-object-rest-spread", { "useBuiltIns": true }]]
-		},
-		"dev": {
-			"plugins": [["flow-runtime"], ["transform-object-rest-spread", { "useBuiltIns": true }], "transform-flow-strip-types"]
-		},
-    "test": {
-      "plugins": ["transform-flow-strip-types", "babel-plugin-rewire"]
-    }
-	},
+  "presets": ["env"],
+  "plugins": ["transform-flow-strip-types", "babel-plugin-rewire"]
 }
