@@ -2,17 +2,15 @@
 import axios from 'axios';
 import qs from 'qs';
 
-import type { AxiosXHRConfig } from 'axios';
 // eslint-disable-next-line
-import type {
-  QueryParams, WriteParams, InfluxResponse, UrlParams,
-} from '.';
+import type { QueryParams, WriteParams, UrlParams, Config, Response } from '.';
 
 // Returns base post params
 const postParams = (params: WriteParams | QueryParams) => {
-  const result: Object = {
+  const result = {
     url: params.url,
     method: 'POST',
+    auth: undefined,
   };
 
   if (params.u) {
@@ -27,7 +25,7 @@ const postParams = (params: WriteParams | QueryParams) => {
 };
 
 // Returns params for Influx query request
-const queryParams = (params: QueryParams): AxiosXHRConfig<string> => {
+const queryParams = (params: QueryParams): Config => {
   const headers = {
     Accept: 'application/json',
   };
@@ -38,10 +36,11 @@ const queryParams = (params: QueryParams): AxiosXHRConfig<string> => {
     headers.Accept = 'application/x-msgpack';
   }
 
-  const result: Object = {
+  const result = {
     ...postParams(params),
     headers,
     data: qs.stringify({ q: params.q }),
+    params: undefined,
   };
 
   // handle conditional params
@@ -57,8 +56,8 @@ const queryParams = (params: QueryParams): AxiosXHRConfig<string> => {
 };
 
 // Returns params for Influx write request
-const writeParams = (params: WriteParams): AxiosXHRConfig<string> => {
-  const result: Object = {
+const writeParams = (params: WriteParams): Config => {
+  const result = {
     ...postParams(params),
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded', // required to send query in POST body
@@ -67,6 +66,9 @@ const writeParams = (params: WriteParams): AxiosXHRConfig<string> => {
     data: params.data,
     params: {
       db: params.db,
+      precision: undefined,
+      rp: undefined,
+      consistency: undefined,
     },
   };
 
@@ -84,8 +86,7 @@ const writeParams = (params: WriteParams): AxiosXHRConfig<string> => {
 };
 
 // Execute Influx request using POST
-const post = (config: AxiosXHRConfig<string>): Promise<InfluxResponse> => (
-  // $FlowFixMe
+const post = (config: Config): Promise<Response> => (
   new Promise((resolve, reject) => axios(config)
     .then(result => resolve(result))
     .catch((error) => {
@@ -105,12 +106,12 @@ const post = (config: AxiosXHRConfig<string>): Promise<InfluxResponse> => (
 );
 
 // Execute Influx query
-export const query = (params: QueryParams): Promise<InfluxResponse> => (
+export const query = (params: QueryParams): Promise<Response> => (
   post(queryParams({ ...params, url: `${params.url}/query` }))
 );
 
 // Write points to Influx
-export const write = (params: WriteParams): Promise<InfluxResponse> => (
+export const write = (params: WriteParams): Promise<Response> => (
   post(writeParams({ ...params, url: `${params.url}/write` }))
 );
 

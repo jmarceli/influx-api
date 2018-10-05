@@ -1,4 +1,6 @@
 // @flow
+import type { $AxiosXHR, $AxiosXHRConfig } from 'axios';
+
 type Consistency = 'any' | 'one' | 'quorum' | 'all';
 type Precision = 'ns' | 'u' | 'ms' | 's' | 'm' | 'h';
 type Chunked = true | number;
@@ -30,8 +32,11 @@ export type WriteParams = {|
   rp?: string,
 |};
 
-export type InfluxResponse = { data: { results: { series: { values: any[] }[] }[] } };
+export type InfluxResponse = { results: { series: { values: any[] }[] }[] } | string;
 
-declare export function query(params: QueryParams): Promise<InfluxResponse>;
-declare export function write(params: WriteParams): Promise<InfluxResponse>;
+export type Config = $AxiosXHRConfig<string, InfluxResponse>;
+export type Response = $AxiosXHR<string, InfluxResponse>;
+
+declare export function query(params: QueryParams): Promise<Response>;
+declare export function write(params: WriteParams): Promise<Response>;
 declare export function buildUrl(params: UrlParams): string;
