@@ -1,4 +1,4 @@
-// @flow strict
+// @flow
 import axiosBase from 'axios';
 import { write, query, buildUrl } from './index';
 

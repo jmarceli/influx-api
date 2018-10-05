@@ -86,24 +86,24 @@ const writeParams = (params: WriteParams): Config => {
 };
 
 // Execute Influx request using POST
-const post = (config: Config): Promise<Response> => (
-  new Promise((resolve, reject) => axios(config)
-    .then(result => resolve(result))
-    .catch((error) => {
-      if (typeof error.response === 'undefined') {
-        // ensure some .response in case of
-        // possibly preflight/CORS error (see: https://github.com/axios/axios/issues/838)
-        // eslint-disable-next-line
-        error.response = {
-          status: 400,
-          statusText: error.message,
-          data: 'This might be a CORS error, network problem or invalid HTTPS redirect, invalid URL. Please check your connection configuration once more.',
-        };
-      }
-
-      reject(error);
-    }))
-);
+const post = async (config: Config): Promise<Response> => {
+  try {
+    return await axios(config);
+  } catch (error) {
+    if (typeof error.response === 'undefined') {
+      // ensure some .response in case of
+      // possibly preflight/CORS error (see: https://github.com/axios/axios/issues/838)
+      // eslint-disable-next-line
+      error.response = {
+        status: 400,
+        statusText: error.message,
+        data: 'This might be a CORS error, network problem or invalid HTTPS redirect, invalid URL. Please check your connection configuration once more.',
+      };
+    }
+    // rethrow after ensuring response property
+    throw error;
+  }
+};
 
 // Execute Influx query
 export const query = (params: QueryParams): Promise<Response> => (
