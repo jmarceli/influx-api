@@ -3,7 +3,7 @@ Influx API
 
 [![Build Status](https://travis-ci.org/jmarceli/influx-api.svg?branch=master)](https://travis-ci.org/jmarceli/influx-api) [![dependencies Status](https://david-dm.org/jmarceli/influx-api/status.svg)](https://david-dm.org/jmarceli/influx-api) [![devDependencies Status](https://david-dm.org/jmarceli/influx-api/dev-status.svg)](https://david-dm.org/jmarceli/influx-api?type=dev) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Thin wrapper around [Axios HTTP client](https://github.com/axios/axios) which is targeted to work with [InfluxDB HTTP API](https://docs.influxdata.com/influxdb/v1.6/tools/api/).
+Thin wrapper around [Axios HTTP client](https://github.com/axios/axios) which works with [InfluxDB HTTP API](https://docs.influxdata.com/influxdb/v1.6/tools/api/).
 
 # Installation
 
@@ -55,7 +55,7 @@ console.log(result); // empty string on success
 
 ### Query
 
-Query specific **db** (`influx_db`) using selected **u** (`username`) and **p** (`password`) with given **precision** (`ms`) expecting **responseType** (`csv` string) as a result.
+Execute on **db** (`influx_db`) using selected **u** (`username`) and **p** (`password`) with given **precision** (`ms`) expecting **responseType** (`csv` string) as a result.
 
 ```js
 import { query } from 'influx-api';
@@ -102,14 +102,14 @@ console.log(result); // empty string on success
 - **u** (string) - Influx username
 - **p** (string) - Influx password
 - **epoch** (string) - Time precision in query response, available values are: (default) `ns`, `u`, `ms`, `s`, `m`, `h`
-- **responseType** (string) - Type of response data, available values are: (default) `json`, `csv`, `msgpack`
+- **responseType** (string) - Response data type, available values are: (default) `json`, `csv`, `msgpack`
 
 ## write(params)
 
 **params** - object with following properties, see official [Influx HTTP API write endpoint](https://docs.influxdata.com/influxdb/v1.6/tools/api/#query-string-parameters-2)
 
 - **url** (string) - (required) Influx URL
-- **db** (string) - (required) Influx database name where measurements will be written
+- **db** (string) - (required) Influx database name for measurements
 - **data** (string) - [InfluxDB Line Protocol](https://docs.influxdata.com/influxdb/v1.6/write_protocols/line_protocol_reference/) compatible string
 - **u** (string) - Influx username
 - **p** (string) - Influx password
@@ -121,7 +121,7 @@ console.log(result); // empty string on success
 
 - Uses Basic Authentication headers - never sends authentication credentials as query parameters
 - Allows to select prefered responseType - default is JSON but you may also select CSV or [MSGPACK](https://msgpack.org/index.html) if you want
-- Supports all Influx Data Types - use [Influx Line Protocol format](https://docs.influxdata.com/influxdb/v1.6/write_protocols/line_protocol_reference/) to specify type of written data e.g. (`123i` for Integer)
+- Supports all Influx Data Types - use [Influx Line Protocol format](https://docs.influxdata.com/influxdb/v1.6/write_protocols/line_protocol_reference/) types for writing data e.g. (`123i` for Integer)
 - Follows Influx HTTP API conventions - it uses same parameters notation as official Influx HTTP API and allows you to write points directly in Line Protocol format
 - Stateless - like Influx HTTP API itself, there is no need to create any kind of client object
 - Ease of use - correct me if I'm wrong :)
@@ -134,7 +134,7 @@ Most features listed in [Features](#features) section are unavailable in the mos
 
 **Does it have a stable API?**
 
-It will have as of **1.x.x** version, but currently (**0.x.x** version) it might be modified, but it is not something that is very likely to happen.
+I don't have any plans for changing the API but don't consider it stable until version **1.x.x**.
 
 **Why arguments has such strage names: u, p etc.?**
 
