@@ -2,15 +2,17 @@
 import axios from 'axios';
 import qs from 'qs';
 
+import type { $AxiosXHRConfig } from 'axios';
 // eslint-disable-next-line
-import type { QueryParams, WriteParams, UrlParams, Config, Response } from '.';
+import type { QueryParams, WriteParams, UrlParams, InfluxResponse, JSONResponse, ResponseType } from '.';
+
+type PostParams = { url: string, method: string, auth?: { username: string, password: string } };
 
 // Returns base post params
-const postParams = (params: WriteParams | QueryParams) => {
-  const result = {
+const postParams = (params: WriteParams | QueryParams<ResponseType>) => {
+  const result: PostParams = {
     url: params.url,
     method: 'POST',
-    auth: undefined,
   };
 
   if (params.u) {
@@ -25,7 +27,7 @@ const postParams = (params: WriteParams | QueryParams) => {
 };
 
 // Returns params for Influx query request
-const queryParams = (params: QueryParams): Config => {
+const queryParams = (params: QueryParams<ResponseType>) => {
   const headers = {
     Accept: 'application/json',
   };
@@ -36,11 +38,10 @@ const queryParams = (params: QueryParams): Config => {
     headers.Accept = 'application/x-msgpack';
   }
 
-  const result = {
+  const result: $AxiosXHRConfig<string> = {
     ...postParams(params),
     headers,
     data: qs.stringify({ q: params.q }),
-    params: undefined,
   };
 
   // handle conditional params
@@ -56,7 +57,7 @@ const queryParams = (params: QueryParams): Config => {
 };
 
 // Returns params for Influx write request
-const writeParams = (params: WriteParams): Config => {
+const writeParams = (params: WriteParams) => {
   const result = {
     ...postParams(params),
     headers: {
@@ -86,7 +87,7 @@ const writeParams = (params: WriteParams): Config => {
 };
 
 // Execute Influx request using POST
-const post = async (config: Config): Promise<Response> => {
+const post = async (config: $AxiosXHRConfig<string>) => {
   try {
     return await axios(config);
   } catch (error) {
@@ -106,14 +107,20 @@ const post = async (config: Config): Promise<Response> => {
 };
 
 // Execute Influx query
-export const query = (params: QueryParams): Promise<Response> => (
-  post(queryParams({ ...params, url: `${params.url}/query` }))
-);
+export const query = (params: QueryParams<ResponseType>) => {
+  const args = params;
+  args.url += '/query';
+  return post(queryParams(params));
+};
+// { ...params, url: `${params.url}/query` }))
 
 // Write points to Influx
-export const write = (params: WriteParams): Promise<Response> => (
-  post(writeParams({ ...params, url: `${params.url}/write` }))
-);
+export const write = (params: WriteParams) => {
+  const args = params;
+  args.url += '/write';
+  return post(writeParams(args));
+};
+// { ...params, url: `${params.url}/write` }))
 
 // Converts connection params to URL
 export const buildUrl = ({ host, ssl = false, port = 8086 }: UrlParams): string => (
